@@ -36,7 +36,7 @@ function performMathematicalOperations($arguments) {
 						if(is_numeric($value) && $value < 0)
 						{
 							array_push($arr_error_numbers, $value);
-						}elseif(is_numeric($value) && $value>=0) {
+						}elseif(is_numeric($value) && $value<=1000) {
 							$answer += $value;
 						}
 					}
@@ -48,7 +48,7 @@ function performMathematicalOperations($arguments) {
 			return $answer."\n";
 		}
 		else {
-			return $arguments[0]." is not a mathematical operation.\n";
+				return $arguments[0]." is not a mathematical operation.\n";
 		}
   	}
   	else {
@@ -86,9 +86,10 @@ function generateDelimeterString($string)
 		return str_replace("\\", "", $match[0]);
 	}
 	else {
-		return 'not matched';
+		return false;
 	}
 }
 
 exit (0);
+
 ?>

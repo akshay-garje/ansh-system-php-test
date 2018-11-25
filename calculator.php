@@ -32,7 +32,10 @@ function performMathematicalOperations($arguments) {
 				$arr_values = multipleExplode($arr_delimeters,$str_values);
 				if(isset($arr_values) && count($arr_values)>0) {
 					foreach ($arr_values as $key => $value) {
-						if(is_numeric($value)){
+						if(is_numeric($value) && $value < 0)
+						{
+							return "Negative numbers not allowed.\n";
+						}elseif(is_numeric($value) && $value>=0) {
 							$answer += $value;
 						}
 					}
@@ -84,4 +87,5 @@ function generateDelimeterString($string)
 }
 
 exit (0);
+
 ?>

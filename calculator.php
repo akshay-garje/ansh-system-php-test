@@ -5,7 +5,7 @@
 print_r(performMathematicalOperations($argv));
 
 /**
- * { This function will calculate sum operation }
+ * { This function will calculate addition operation }
  *
  * @param      array  $arguments  These areguments are going to pass with the help of terminal
  *
@@ -13,15 +13,13 @@ print_r(performMathematicalOperations($argv));
  */
 function performMathematicalOperations( $arguments )
 {
-  	if(isset($arguments) && count($arguments)>1)
-  	{
+  	if(isset($arguments) && count($arguments)>1) {
 	  	array_shift($arguments);
 		$operation 		= isset($arguments[0])? strtolower($arguments[0]) : "" ;
 		$str_values 	= isset($arguments[1]) ? $arguments[1] : "";
-		if($operation=='sum'){
+		if($operation=='add') {
 			$answer = 0; 
-			if($str_values!='')
-			{
+			if($str_values!='') {
 				$arr_values = explode(',',$str_values);
 				if(isset($arr_values) && count($arr_values)>0) {
 					foreach ($arr_values as $key => $value) {
@@ -33,14 +31,14 @@ function performMathematicalOperations( $arguments )
 			}
 			return $answer."\n";
 		}
-		else{
+		else {
 			return $arguments[0]." is not a mathematical operation.\n";
 		}
   	}
-  	else
-  	{
-		return "Please type sum and provide values for addition.\n";
+  	else {
+		return "Please type 'add' and provide values for addition.\n";
   	}
 }
+
 exit (0)
 ?>

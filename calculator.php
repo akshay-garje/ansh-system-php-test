@@ -5,7 +5,7 @@
 print_r(performMathematicalOperations($argv));
 
 /**
- * { This function will calculate addition operation }
+ * { This function will calculate either add/mulitiply operation }
  *
  * @param      array  $arguments  These areguments are going to pass with the help of terminal
  *
@@ -13,14 +13,19 @@ print_r(performMathematicalOperations($argv));
  */
 function performMathematicalOperations($arguments) {
   	if(isset($arguments) && count($arguments)>1) {
+	  	
 	  	array_shift($arguments);
+	  	
+	  	$arr_operations = ['add','multiply'];
 	  	$arr_delimeters = array(",","\n","n");
 		$operation 		= isset($arguments[0]) ? strtolower($arguments[0]) : "" ;
 		$str_values 	= isset($arguments[1]) ? $arguments[1] : "";
-		if($operation=='add') {
-			$arr_error_numbers = [];
-			$answer = 0; 
+		
+		if(in_array($operation, $arr_operations)) {
+			$arr_data['answer'] 		   = 0;
+			$arr_data['arr_error_numbers'] = [];
 			if($str_values!='') {
+				// String replace for ";" 
 				$str_values = str_replace(";", ":", $str_values);
 				// function call to get dynamic delimeter
 				$delimiter  = generateDelimeterString($str_values);
@@ -32,27 +37,31 @@ function performMathematicalOperations($arguments) {
 				// function call to get values for operation
 				$arr_values = multipleExplode($arr_delimeters,$str_values);
 				if(isset($arr_values) && count($arr_values)>0) {
-					foreach ($arr_values as $key => $value) {
-						if(is_numeric($value) && $value < 0)
-						{
-							array_push($arr_error_numbers, $value);
-						}elseif(is_numeric($value) && $value<=1000) {
-							$answer += $value;
-						}
+					switch ($operation) {
+						case 'multiply':
+							$arr_data = calculationForMultiply($arr_values);
+							break;
+						case 'add':
+							$arr_data = calculationForAdd($arr_values);
+							break;	
+						default:
+							$arr_data = calculationForAdd($arr_values);
+							break;
 					}
 				}
 			}
-			if(count($arr_error_numbers)>0) {
-				return "Negative numbers (".implode(',', $arr_error_numbers).") not allowed.\n";
+			// If any negative values are there it will return the message
+			if(count($arr_data['arr_error_numbers'])>0) {
+				return "Negative numbers (".implode(',', $arr_data['arr_error_numbers']).") not allowed.\n";
 			}
-			return $answer."\n";
+			return $arr_data['answer']."\n";
 		}
 		else {
-				return $arguments[0]." is not a mathematical operation.\n";
+			return $arguments[0]." is not a mathematical operation.\n";
 		}
   	}
   	else {
-		return "Please type 'add' and provide values for addition.\n";
+		return "Please type 'multiply/add' and provide values for multiplication/addition.\n";
   	}
 }
 
@@ -88,6 +97,52 @@ function generateDelimeterString($string)
 	else {
 		return false;
 	}
+}
+
+/**
+ * { This function is for the calculation of addition operation }
+ *
+ * @param      array  $arr_values  It contains all the values for addition
+ *
+ * @return     array   (it will return the answer and also the negative values if any present )
+ */
+function calculationForAdd($arr_values)
+{
+	$arr_error_numbers = [];
+	$answer = 0;
+	foreach ($arr_values as $key => $value) {
+		if(is_numeric($value) && $value < 0)
+		{
+			array_push($arr_error_numbers, $value);
+		}elseif(is_numeric($value) && $value<=1000) {
+			$answer += $value;
+		}
+	}
+	$arr_response = ['arr_error_numbers'=>$arr_error_numbers,'answer'=>$answer];
+	return $arr_response;
+}
+
+/**
+ * { This function is for the calculation of multiplication operation }
+ *
+ * @param      array  $arr_values  It contains all the values for multiplication
+ *
+ * @return     array   (it will return the answer and also the negative values if any present )
+ */
+function calculationForMultiply($arr_values)
+{
+	$arr_error_numbers = [];
+	$answer = 1;
+	foreach ($arr_values as $key => $value) {
+		if(is_numeric($value) && $value < 0)
+		{
+			array_push($arr_error_numbers, $value);
+		}elseif(is_numeric($value) && $value<=1000) {
+			$answer *= $value;
+		}
+	}
+	$arr_response = ['arr_error_numbers'=>$arr_error_numbers,'answer'=>$answer];
+	return $arr_response;
 }
 
 exit (0);

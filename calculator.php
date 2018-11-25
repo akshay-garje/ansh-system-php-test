@@ -41,7 +41,7 @@ function performMathematicalOperations($arguments) {
 			return $answer."\n";
 		}
 		else {
-				return $arguments[0]." is not a mathematical operation.\n";
+			return $arguments[0]." is not a mathematical operation.\n";
 		}
   	}
   	else {

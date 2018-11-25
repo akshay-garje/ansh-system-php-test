@@ -11,8 +11,7 @@ print_r(performMathematicalOperations($argv));
  *
  * @return     string  ( return value will be the answer for given expression or it will also show an error )
  */
-function performMathematicalOperations( $arguments )
-{
+function performMathematicalOperations($arguments) {
   	if(isset($arguments) && count($arguments)>1) {
 	  	array_shift($arguments);
 	  	$arr_delimeters = array(",","\n","n");
@@ -21,6 +20,14 @@ function performMathematicalOperations( $arguments )
 		if($operation=='add') {
 			$answer = 0; 
 			if($str_values!='') {
+				$str_values = str_replace(";", ":", $str_values);
+				// function call to get dynamic delimeter
+				$delimiter  = generateDelimeterString($str_values);
+				if($delimiter==false) {
+					$delimiter = ",";	
+				}else {
+					array_push($arr_delimeters, $delimiter);
+				}
 				// function call to get values for operation
 				$arr_values = multipleExplode($arr_delimeters,$str_values);
 				if(isset($arr_values) && count($arr_values)>0) {
@@ -34,7 +41,7 @@ function performMathematicalOperations( $arguments )
 			return $answer."\n";
 		}
 		else {
-			return $arguments[0]." is not a mathematical operation.\n";
+				return $arguments[0]." is not a mathematical operation.\n";
 		}
   	}
   	else {
@@ -56,6 +63,24 @@ function multipleExplode($delimiters,$string) {
     	return  $arr_explode;
     }
 	return  array();
+}
+
+/**
+ * { This function is to understand which is the dynamic delimeter for separation}
+ *
+ * @param      string   $string  The string
+ *
+ * @return     boolean/string  ( it will return the delimeter or false value )
+ */
+function generateDelimeterString($string)
+{
+	$pattern = "/^\\\\[\n\r;,.!@#$%%^&*()_+;:'|{}]\\\\/";
+	if (preg_match($pattern, $string,$match)) {
+		return str_replace("\\", "", $match[0]);
+	}
+	else {
+		return 'not matched';
+	}
 }
 
 exit (0);

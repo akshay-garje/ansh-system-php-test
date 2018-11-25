@@ -18,6 +18,7 @@ function performMathematicalOperations($arguments) {
 		$operation 		= isset($arguments[0]) ? strtolower($arguments[0]) : "" ;
 		$str_values 	= isset($arguments[1]) ? $arguments[1] : "";
 		if($operation=='add') {
+			$arr_error_numbers = [];
 			$answer = 0; 
 			if($str_values!='') {
 				$str_values = str_replace(";", ":", $str_values);
@@ -34,12 +35,15 @@ function performMathematicalOperations($arguments) {
 					foreach ($arr_values as $key => $value) {
 						if(is_numeric($value) && $value < 0)
 						{
-							return "Negative numbers not allowed.\n";
+							array_push($arr_error_numbers, $value);
 						}elseif(is_numeric($value) && $value>=0) {
 							$answer += $value;
 						}
 					}
 				}
+			}
+			if(count($arr_error_numbers)>0) {
+				return "Negative numbers (".implode(',', $arr_error_numbers).") not allowed.\n";
 			}
 			return $answer."\n";
 		}
@@ -87,5 +91,4 @@ function generateDelimeterString($string)
 }
 
 exit (0);
-
 ?>
